@@ -9,20 +9,20 @@ function Header() {
     </header>
   );
 }
-function Nav() {
+function Nav(props) {
+  let lis = [];
+
+  for (let i = 0; i < props.data.length; i = i + 1) {
+    lis.push(
+      <li>
+        <a href={props.data[i].id}>{props.data[i].title}</a>
+      </li>
+    );
+  }
+
   return (
     <nav>
-      <ol>
-        <li>
-          <a href="1.html">html</a>
-        </li>
-        <li>
-          <a href="2.html">css</a>
-        </li>
-        <li>
-          <a href="3.html">js</a>
-        </li>
-      </ol>
+      <ol>{lis}</ol>
     </nav>
   );
 }
@@ -35,10 +35,16 @@ function Article(props) {
   );
 }
 function App() {
+  let topics = [
+    { id: 1, title: "html", body: "html is ..." },
+    { id: 2, title: "css", body: "css is ..." },
+    { id: 3, title: "js", body: "js is ..." },
+  ];
+
   return (
     <>
       <Header />
-      <Nav />
+      <Nav data={topics} />
       <Article title="Welcome" body="Hello,React" />
     </>
   );
