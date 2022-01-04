@@ -26,11 +26,11 @@ function Nav() {
     </nav>
   );
 }
-function Article() {
+function Article(props) {
   return (
     <article>
-      <h2>Welcome</h2>
-      Hello, WEB!
+      <h2>{props.title}</h2>
+      <p>{props.body}</p>
     </article>
   );
 }
@@ -39,7 +39,7 @@ function App() {
     <>
       <Header />
       <Nav />
-      <Article />
+      <Article title="Welcome" body="Hello,React" />
     </>
   );
 }
