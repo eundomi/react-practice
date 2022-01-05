@@ -3,7 +3,7 @@ import "./App.css";
 function Header(props) {
   function onClickHandler(evt) {
     evt.preventDefault();
-    props.onChangeMode();
+    props.onChangeMode("WELCOME");
   }
   return (
     <header>
@@ -21,9 +21,15 @@ function Nav(props) {
   for (let i = 0; i < props.data.length; i = i + 1) {
     lis.push(
       <li>
-        <a href={props.data[i].id}>{props.data[i].title}</a>
+        <a href={props.data[i].id} onClick={onClickHandler}>
+          {props.data[i].title}
+        </a>
       </li>
     );
+  }
+  function onClickHandler(evt) {
+    evt.preventDefault();
+    props.onChangeMode("READ");
   }
 
   return (
@@ -46,13 +52,13 @@ function App() {
     { id: 2, title: "css", body: "css is ..." },
     { id: 3, title: "js", body: "js is ..." },
   ];
-  function changeModeHandler() {
-    alert("클릭하였습니다.");
+  function changeModeHandler(mode) {
+    alert(mode);
   }
   return (
     <>
       <Header onChangeMode={changeModeHandler} />
-      <Nav data={topics} />
+      <Nav data={topics} onChangeMode={changeModeHandler} />
       <Article title="Welcome" body="Hello,React" />
     </>
   );
