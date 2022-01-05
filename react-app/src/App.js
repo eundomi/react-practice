@@ -22,7 +22,11 @@ function Nav(props) {
   for (let i = 0; i < props.data.length; i = i + 1) {
     lis.push(
       <li>
-        <a href={props.data[i].id} onClick={onClickHandler}>
+        <a
+          href={props.data[i].id}
+          data-id={props.data[i].id}
+          onClick={onClickHandler}
+        >
           {props.data[i].title}
         </a>
       </li>
@@ -30,7 +34,7 @@ function Nav(props) {
   }
   function onClickHandler(evt) {
     evt.preventDefault();
-    props.onChangeMode("READ");
+    props.onChangeMode("READ", evt.target.dataset.id);
   }
 
   return (
@@ -55,8 +59,9 @@ function App() {
     { id: 2, title: "css", body: "css is ..." },
     { id: 3, title: "js", body: "js is ..." },
   ];
-  function changeModeHandler(_mode) {
+  function changeModeHandler(_mode, _id) {
     setMode(_mode);
+    alert(_id);
   }
   let articleTag;
   if (mode === "WELCOME") {
