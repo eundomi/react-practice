@@ -47,6 +47,7 @@ function Article(props) {
   );
 }
 function App() {
+  let mode = "WELCOME";
   let topics = [
     { id: 1, title: "html", body: "html is ..." },
     { id: 2, title: "css", body: "css is ..." },
@@ -55,11 +56,18 @@ function App() {
   function changeModeHandler(mode) {
     alert(mode);
   }
+  let articleTag;
+  if (mode === "WELCOME") {
+    articleTag = <Article title="Welcome" body="Hello, React!" />;
+  } else if (mode === "READ") {
+    articleTag = <Article title="Read" body="Hello, READ!" />;
+  }
+
   return (
     <>
       <Header onChangeMode={changeModeHandler} />
       <Nav data={topics} onChangeMode={changeModeHandler} />
-      <Article title="Welcome" body="Hello,React" />
+      {articleTag}
     </>
   );
 }
