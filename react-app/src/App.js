@@ -76,8 +76,11 @@ function App() {
         body = topics[i].body;
       }
     }
-
     articleTag = <Article title={title} body={body} />;
+  } else if (mode === "CREATE") {
+    articleTag = <Article title="Create" body="Hello,Create" />;
+  } else if (mode === "UPDATE") {
+    articleTag = <Article title="Update" body="Hello,Update" />;
   }
 
   return (
@@ -85,7 +88,36 @@ function App() {
       <Header onChangeMode={changeModeHandler} />
       <Nav data={topics} onChangeMode={changeModeHandler} />
       {articleTag}
+      <Control onChangeMode={changeModeHandler} />
     </>
+  );
+}
+function Control(props) {
+  function ClickHandler(evt) {
+    evt.preventDefault();
+    props.onChangeMode("CREATE");
+  }
+  function ClickUpdateHandler(evt) {
+    evt.preventDefault();
+    props.onChangeMode("UPDATE");
+  }
+
+  return (
+    <ul>
+      <li>
+        <a href="/create" onClick={ClickHandler}>
+          create
+        </a>
+      </li>
+      <li>
+        <a href="/update" onClick={ClickUpdateHandler}>
+          update
+        </a>
+      </li>
+      <li>
+        <a href="/delete">delete</a>
+      </li>
+    </ul>
   );
 }
 
