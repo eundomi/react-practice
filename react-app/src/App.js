@@ -21,7 +21,7 @@ function Nav(props) {
 
   for (let i = 0; i < props.data.length; i = i + 1) {
     lis.push(
-      <li>
+      <li key={props.data[i].id}>
         <a
           href={props.data[i].id}
           data-id={props.data[i].id}
@@ -34,7 +34,7 @@ function Nav(props) {
   }
   function onClickHandler(evt) {
     evt.preventDefault();
-    props.onChangeMode("READ", evt.target.dataset.id);
+    props.onChangeMode("READ", Number(evt.target.dataset.id));
   }
 
   return (
@@ -52,7 +52,8 @@ function Article(props) {
   );
 }
 function App() {
-  let [mode, setMode] = useState("WELCOME");
+  const [mode, setMode] = useState("WELCOME");
+  let [id, setId] = useState("");
 
   let topics = [
     { id: 1, title: "html", body: "html is ..." },
@@ -61,13 +62,22 @@ function App() {
   ];
   function changeModeHandler(_mode, _id) {
     setMode(_mode);
-    alert(_id);
+    setId(_id);
   }
   let articleTag;
   if (mode === "WELCOME") {
     articleTag = <Article title="Welcome" body="Hello, React!" />;
   } else if (mode === "READ") {
-    articleTag = <Article title="Read" body="Hello, READ!" />;
+    let title = null;
+    let body = null;
+    for (let i = 0; i < topics.length; i++) {
+      if (topics[i].id === id) {
+        title = topics[i].title;
+        body = topics[i].body;
+      }
+    }
+
+    articleTag = <Article title={title} body={body} />;
   }
 
   return (
