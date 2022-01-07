@@ -10,7 +10,7 @@ function Header(props) {
     <header>
       <h1>
         <a href="index.html" onClick={onClickHandler}>
-          React
+          {props.title}
         </a>
       </h1>
     </header>
@@ -51,15 +51,40 @@ function Article(props) {
     </article>
   );
 }
+function Create(props) {
+  function submitHandler(evt) {
+    evt.preventDefault();
+    let title = evt.target.title.value;
+    let body = evt.target.body.value;
+    props.onSubmit(title, body);
+  }
+  return (
+    <article>
+      <h2>Create</h2>
+      <form onSubmit={submitHandler}>
+        <p>
+          <input type="text" name="title" placeholder="title" />
+        </p>
+        <p>
+          <textarea name="body" placeholder="body"></textarea>
+        </p>
+        <p>
+          <input type="submit" value="create" />
+        </p>
+      </form>
+    </article>
+  );
+}
 function App() {
   const [mode, setMode] = useState("WELCOME");
-  let [id, setId] = useState("");
+  const [id, setId] = useState("");
+  const [nextId, setNextId] = useState(4);
 
-  let topics = [
+  const [topics, setTopics] = useState([
     { id: 1, title: "html", body: "html is ..." },
     { id: 2, title: "css", body: "css is ..." },
     { id: 3, title: "js", body: "js is ..." },
-  ];
+  ]);
   function changeModeHandler(_mode, _id) {
     setMode(_mode);
     setId(_id);
@@ -78,14 +103,20 @@ function App() {
     }
     articleTag = <Article title={title} body={body} />;
   } else if (mode === "CREATE") {
-    articleTag = <Article title="Create" body="Hello,Create" />;
+    function createSubmitHandler(_title, _body) {
+      let newTopic = { id: nextId, title: _title, body: _body };
+      let newTopics = [...topics];
+      newTopics.push(newTopic);
+      setTopics(newTopics);
+    }
+    articleTag = <Create onSubmit={createSubmitHandler}></Create>;
   } else if (mode === "UPDATE") {
     articleTag = <Article title="Update" body="Hello,Update" />;
   }
 
   return (
     <>
-      <Header onChangeMode={changeModeHandler} />
+      <Header title="WEB" onChangeMode={changeModeHandler} />
       <Nav data={topics} onChangeMode={changeModeHandler} />
       {articleTag}
       <Control onChangeMode={changeModeHandler} />
