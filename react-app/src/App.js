@@ -108,6 +108,9 @@ function App() {
       let newTopics = [...topics];
       newTopics.push(newTopic);
       setTopics(newTopics);
+      setMode("READ");
+      setId(nextId);
+      //20''
     }
     articleTag = <Create onSubmit={createSubmitHandler}></Create>;
   } else if (mode === "UPDATE") {
