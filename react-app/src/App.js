@@ -110,6 +110,7 @@ function App() {
       setTopics(newTopics);
       setMode("READ");
       setId(nextId);
+      setNextId(nextId + 1);
       //20''
     }
     articleTag = <Create onSubmit={createSubmitHandler}></Create>;
