@@ -103,17 +103,19 @@ function App() {
     }
     articleTag = <Article title={title} body={body} />;
   } else if (mode === "CREATE") {
-    function createSubmitHandler(_title, _body) {
-      let newTopic = { id: nextId, title: _title, body: _body };
-      let newTopics = [...topics];
-      newTopics.push(newTopic);
-      setTopics(newTopics);
-      setMode("READ");
-      setId(nextId);
-      setNextId(nextId + 1);
-      //20''
-    }
-    articleTag = <Create onSubmit={createSubmitHandler}></Create>;
+    articleTag = (
+      <Create
+        onSubmit={(_title, _body) => {
+          let newTopic = { id: nextId, title: _title, body: _body };
+          let newTopics = [...topics];
+          newTopics.push(newTopic);
+          setTopics(newTopics);
+          setMode("READ");
+          setId(nextId);
+          setNextId(nextId + 1);
+        }}
+      ></Create>
+    );
   } else if (mode === "UPDATE") {
     articleTag = <Article title="Update" body="Hello,Update" />;
   }
