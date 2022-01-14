@@ -75,6 +75,37 @@ function Create(props) {
     </article>
   );
 }
+function Update(props) {
+  function submitHandler(evt) {
+    evt.preventDefault();
+    let title = evt.target.title.value;
+    let body = evt.target.body.value;
+    props.onSubmit(title, body);
+  }
+  return (
+    <article>
+      <h2>Update</h2>
+      <form onSubmit={submitHandler}>
+        <p>
+          <input
+            type="text"
+            name="title"
+            placeholder="title"
+            value={props.title}
+          />
+        </p>
+        <p>
+          <textarea name="body" placeholder="body">
+            {props.body}
+          </textarea>
+        </p>
+        <p>
+          <input type="submit" value="create" />
+        </p>
+      </form>
+    </article>
+  );
+}
 function App() {
   const [mode, setMode] = useState("WELCOME");
   const [id, setId] = useState("");
@@ -117,15 +148,23 @@ function App() {
       ></Create>
     );
   } else if (mode === "UPDATE") {
-    articleTag = <Article title="Update" body="Hello,Update" />;
+    let title = null;
+    let body = null;
+    for (let i = 0; i < topics.length; i++) {
+      if (topics[i].id === id) {
+        title = topics[i].title;
+        body = topics[i].body;
+      }
+    }
+    console.log("title : ", title);
+    articleTag = <Update title={title} body={body}></Update>;
   }
-
   return (
     <>
       <Header title="WEB" onChangeMode={changeModeHandler} />
       <Nav data={topics} onChangeMode={changeModeHandler} />
       {articleTag}
-      <Control onChangeMode={changeModeHandler} />
+      <Control onChangeMode={changeModeHandler} selectedId={id} />
     </>
   );
 }
@@ -139,6 +178,17 @@ function Control(props) {
     props.onChangeMode("UPDATE");
   }
 
+  let contextUI = null;
+  if (props.selectedId > 0) {
+    contextUI = (
+      <li>
+        <a href="/update" onClick={ClickUpdateHandler}>
+          update
+        </a>
+      </li>
+    );
+  }
+
   return (
     <ul>
       <li>
@@ -146,11 +196,7 @@ function Control(props) {
           create
         </a>
       </li>
-      <li>
-        <a href="/update" onClick={ClickUpdateHandler}>
-          update
-        </a>
-      </li>
+      {contextUI}
       <li>
         <a href="/delete">delete</a>
       </li>
