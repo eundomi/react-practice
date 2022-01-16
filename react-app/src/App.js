@@ -76,6 +76,8 @@ function Create(props) {
   );
 }
 function Update(props) {
+  const [title, setTitle] = useState(props.title);
+  const [body, setBody] = useState(props.body);
   function submitHandler(evt) {
     evt.preventDefault();
     let title = evt.target.title.value;
@@ -91,16 +93,24 @@ function Update(props) {
             type="text"
             name="title"
             placeholder="title"
-            value={props.title}
+            value={title}
+            onChange={(evt) => {
+              setTitle(evt.target.value);
+            }}
           />
         </p>
         <p>
-          <textarea name="body" placeholder="body">
-            {props.body}
-          </textarea>
+          <textarea
+            name="body"
+            placeholder="body"
+            value={body}
+            onChange={(evt) => {
+              setBody(evt.target.value);
+            }}
+          ></textarea>
         </p>
         <p>
-          <input type="submit" value="create" />
+          <input type="submit" value="update" />
         </p>
       </form>
     </article>
@@ -120,6 +130,7 @@ function App() {
     setMode(_mode);
     setId(_id);
   }
+
   let articleTag;
   if (mode === "WELCOME") {
     articleTag = <Article title="Welcome" body="Hello, React!" />;
@@ -157,7 +168,24 @@ function App() {
       }
     }
     console.log("title : ", title);
-    articleTag = <Update title={title} body={body}></Update>;
+    articleTag = (
+      <Update
+        title={title}
+        body={body}
+        onSubmit={(title, body) => {
+          let newTopics = [...topics];
+          for (let i = 0; i < newTopics.length; i++) {
+            if (newTopics[i].id === id) {
+              newTopics[i].title = title;
+              newTopics[i].body = body;
+            }
+          }
+          setTopics(newTopics);
+          setMode("READ");
+          setId(nextId);
+        }}
+      ></Update>
+    );
   }
   return (
     <>
@@ -175,7 +203,7 @@ function Control(props) {
   }
   function ClickUpdateHandler(evt) {
     evt.preventDefault();
-    props.onChangeMode("UPDATE");
+    props.onChangeMode("UPDATE", props.selectedId);
   }
 
   let contextUI = null;
