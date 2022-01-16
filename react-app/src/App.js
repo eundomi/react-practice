@@ -127,6 +127,17 @@ function App() {
     { id: 3, title: "js", body: "js is ..." },
   ]);
   function changeModeHandler(_mode, _id) {
+    if (_mode === "DELETE") {
+      let newTopics = [];
+      for (let i = 0; i < topics.length; i++) {
+        if (topics[i].id !== id) {
+          newTopics.push(topics[i]);
+        }
+      }
+      setTopics(newTopics);
+      setMode("WELCOME");
+      return;
+    }
     setMode(_mode);
     setId(_id);
   }
@@ -209,11 +220,23 @@ function Control(props) {
   let contextUI = null;
   if (props.selectedId > 0) {
     contextUI = (
-      <li>
-        <a href="/update" onClick={ClickUpdateHandler}>
-          update
-        </a>
-      </li>
+      <>
+        <li>
+          <a href="/update" onClick={ClickUpdateHandler}>
+            update
+          </a>
+        </li>
+        <li>
+          <form
+            onSubmit={(evt) => {
+              evt.preventDefault();
+              props.onChangeMode("DELETE");
+            }}
+          >
+            <input type="submit" value="delete" />
+          </form>
+        </li>
+      </>
     );
   }
 
@@ -225,9 +248,6 @@ function Control(props) {
         </a>
       </li>
       {contextUI}
-      <li>
-        <a href="/delete">delete</a>
-      </li>
     </ul>
   );
 }
