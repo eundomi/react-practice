@@ -1,17 +1,12 @@
 import "./App.css";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Header(props) {
-  function onClickHandler(evt) {
-    evt.preventDefault();
-    props.onChangeMode("WELCOME");
-  }
   return (
     <header>
       <h1>
-        <a href="index.html" onClick={onClickHandler}>
-          {props.title}
-        </a>
+        <Link to="/">{props.title}</Link>
       </h1>
     </header>
   );
@@ -22,19 +17,9 @@ function Nav(props) {
   for (let i = 0; i < props.data.length; i = i + 1) {
     lis.push(
       <li key={props.data[i].id}>
-        <a
-          href={props.data[i].id}
-          data-id={props.data[i].id}
-          onClick={onClickHandler}
-        >
-          {props.data[i].title}
-        </a>
+        <Link to={"/read" + props.data[i].id}>{props.data[i].title}</Link>
       </li>
     );
-  }
-  function onClickHandler(evt) {
-    evt.preventDefault();
-    props.onChangeMode("READ", Number(evt.target.dataset.id));
   }
 
   return (
