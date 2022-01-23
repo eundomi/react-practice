@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState } from "react";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useParams } from "react-router-dom";
 
 function Header(props) {
   return (
@@ -190,12 +190,30 @@ function App() {
       <Header title="WEB" onChangeMode={changeModeHandler} />
       <Nav data={topics} onChangeMode={changeModeHandler} />
       <Routes>
-        <Route path="/" element={<>Welcome</>}></Route>
-        <Route path="/read/:id" element={<>Read</>}></Route>
+        <Route
+          path="/"
+          element={<Article title="Welcome" body="Hello, React!" />}
+        ></Route>
+        <Route path="/read/:id" element={<Read topics={topics}></Read>}></Route>
       </Routes>
       <Control onChangeMode={changeModeHandler} selectedId={id} />
     </>
   );
+}
+function Read(props) {
+  const params = useParams();
+  const id = Number(params.id);
+  const topics = props.topics;
+  let title = null;
+  let body = null;
+  for (let i = 0; i < topics.length; i++) {
+    if (topics[i].id === id) {
+      title = topics[i].title;
+      body = topics[i].body;
+    }
+  }
+  console.log(title, body);
+  return <Article title={title} body={body} />;
 }
 function Control(props) {
   function ClickHandler(evt) {
