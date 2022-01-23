@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 
 function Header(props) {
   return (
@@ -17,7 +17,7 @@ function Nav(props) {
   for (let i = 0; i < props.data.length; i = i + 1) {
     lis.push(
       <li key={props.data[i].id}>
-        <Link to={"/read" + props.data[i].id}>{props.data[i].title}</Link>
+        <Link to={"/read/" + props.data[i].id}>{props.data[i].title}</Link>
       </li>
     );
   }
@@ -189,7 +189,10 @@ function App() {
     <>
       <Header title="WEB" onChangeMode={changeModeHandler} />
       <Nav data={topics} onChangeMode={changeModeHandler} />
-      Router Here!
+      <Routes>
+        <Route path="/" element={<>Welcome</>}></Route>
+        <Route path="/read/:id" element={<>Read</>}></Route>
+      </Routes>
       <Control onChangeMode={changeModeHandler} selectedId={id} />
     </>
   );
