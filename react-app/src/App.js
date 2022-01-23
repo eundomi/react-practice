@@ -126,7 +126,7 @@ function App() {
     setMode(_mode);
     setId(_id);
   }
-
+  /*
   let articleTag;
   if (mode === "WELCOME") {
     articleTag = <Article title="Welcome" body="Hello, React!" />;
@@ -183,11 +183,13 @@ function App() {
       ></Update>
     );
   }
+  */
+
   return (
     <>
       <Header title="WEB" onChangeMode={changeModeHandler} />
       <Nav data={topics} onChangeMode={changeModeHandler} />
-      {articleTag}
+      Router Here!
       <Control onChangeMode={changeModeHandler} selectedId={id} />
     </>
   );
