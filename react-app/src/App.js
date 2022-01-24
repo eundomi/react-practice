@@ -130,80 +130,17 @@ function App() {
     { id: 2, title: "css", body: "css is ..." },
     { id: 3, title: "js", body: "js is ..." },
   ]);
-  function changeModeHandler(_mode, _id) {
-    if (_mode === "DELETE") {
-      let newTopics = [];
-      for (let i = 0; i < topics.length; i++) {
-        if (topics[i].id !== id) {
-          newTopics.push(topics[i]);
-        }
-      }
-      setTopics(newTopics);
-      setMode("WELCOME");
-      return;
-    }
-    setMode(_mode);
-    setId(_id);
-  }
-  /*
-  let articleTag;
-  if (mode === "WELCOME") {
-    articleTag = <Article title="Welcome" body="Hello, React!" />;
-  } else if (mode === "READ") {
-    let title = null;
-    let body = null;
+  function changeModeHandler(id) {
+    let newTopics = [];
     for (let i = 0; i < topics.length; i++) {
-      if (topics[i].id === id) {
-        title = topics[i].title;
-        body = topics[i].body;
+      if (topics[i].id !== id) {
+        newTopics.push(topics[i]);
       }
     }
-    articleTag = <Article title={title} body={body} />;
-  } else if (mode === "CREATE") {
-    articleTag = (
-      <Create
-        onSubmit={(_title, _body) => {
-          let newTopic = { id: nextId, title: _title, body: _body };
-          let newTopics = [...topics];
-          newTopics.push(newTopic);
-          setTopics(newTopics);
-          setMode("READ");
-          setId(nextId);
-          setNextId(nextId + 1);
-        }}
-      ></Create>
-    );
-  } else if (mode === "UPDATE") {
-    let title = null;
-    let body = null;
-    for (let i = 0; i < topics.length; i++) {
-      if (topics[i].id === id) {
-        title = topics[i].title;
-        body = topics[i].body;
-      }
-    }
-    console.log("title : ", title);
-    articleTag = (
-      <Update
-        title={title}
-        body={body}
-        onSubmit={(title, body) => {
-          let newTopics = [...topics];
-          for (let i = 0; i < newTopics.length; i++) {
-            if (newTopics[i].id === id) {
-              newTopics[i].title = title;
-              newTopics[i].body = body;
-            }
-          }
-          setTopics(newTopics);
-          setMode("READ");
-          setId(nextId);
-        }}
-      ></Update>
-    );
+    setTopics(newTopics);
+    navigate("/");
+    return;
   }
-  */
-
   return (
     <>
       <Header title="WEB" onChangeMode={changeModeHandler} />
@@ -259,7 +196,7 @@ function App() {
         ></Route>
         <Route
           path="/read/:id"
-          element={<Control onChangeMode={changeModeHandler} />}
+          element={<Control onDelete={changeModeHandler} />}
         ></Route>
       </Routes>
     </>
@@ -293,7 +230,7 @@ function Control(props) {
           <form
             onSubmit={(evt) => {
               evt.preventDefault();
-              props.onChangeMode("DELETE");
+              props.onDelete(selectedId);
             }}
           >
             <input type="submit" value="delete" />
