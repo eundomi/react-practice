@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState } from "react";
-import { Link, Routes, Route, useParams } from "react-router-dom";
+import { Link, Routes, Route, useParams, useNavigate } from "react-router-dom";
 
 function Header(props) {
   return (
@@ -105,7 +105,7 @@ function App() {
   const [mode, setMode] = useState("WELCOME");
   const [id, setId] = useState("");
   const [nextId, setNextId] = useState(4);
-
+  const navigate = useNavigate();
   const [topics, setTopics] = useState([
     { id: 1, title: "html", body: "html is ..." },
     { id: 2, title: "css", body: "css is ..." },
@@ -195,6 +195,23 @@ function App() {
           element={<Article title="Welcome" body="Hello, React!" />}
         ></Route>
         <Route path="/read/:id" element={<Read topics={topics}></Read>}></Route>
+        <Route
+          path="/create"
+          element={
+            <Create
+              onSubmit={(_title, _body) => {
+                let newTopic = { id: nextId, title: _title, body: _body };
+                let newTopics = [...topics];
+                newTopics.push(newTopic);
+                setTopics(newTopics);
+                // setMode("READ");
+                // setId(nextId);
+                navigate("/read/" + nextId);
+                setNextId(nextId + 1);
+              }}
+            ></Create>
+          }
+        ></Route>
       </Routes>
       <Control onChangeMode={changeModeHandler} selectedId={id} />
     </>
@@ -251,9 +268,7 @@ function Control(props) {
   return (
     <ul>
       <li>
-        <a href="/create" onClick={ClickHandler}>
-          create
-        </a>
+        <Link to="/create">create</Link>
       </li>
       {contextUI}
     </ul>
