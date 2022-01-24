@@ -1,6 +1,13 @@
 import "./App.css";
 import { useState } from "react";
-import { Link, Routes, Route, useParams, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Routes,
+  Route,
+  useParams,
+  useNavigate,
+  Router,
+} from "react-router-dom";
 
 function Header(props) {
   return (
@@ -61,13 +68,25 @@ function Create(props) {
   );
 }
 function Update(props) {
-  const [title, setTitle] = useState(props.title);
-  const [body, setBody] = useState(props.body);
+  const params = useParams();
+  const id = Number(params.id);
+  const topics = props.topics;
+  let _title = null;
+  let _body = null;
+  for (let i = 0; i < topics.length; i++) {
+    if (topics[i].id === id) {
+      _title = topics[i].title;
+      _body = topics[i].body;
+    }
+  }
+
+  const [title, setTitle] = useState(_title);
+  const [body, setBody] = useState(_body);
   function submitHandler(evt) {
     evt.preventDefault();
     let title = evt.target.title.value;
     let body = evt.target.body.value;
-    props.onSubmit(title, body);
+    props.onSubmit(id, title, body);
   }
   return (
     <article>
@@ -212,8 +231,37 @@ function App() {
             ></Create>
           }
         ></Route>
+        <Route
+          path="/update/:id"
+          element={
+            <Update
+              topics={topics}
+              onSubmit={(id, title, body) => {
+                let newTopics = [...topics];
+                for (let i = 0; i < newTopics.length; i++) {
+                  if (newTopics[i].id === id) {
+                    newTopics[i].title = title;
+                    newTopics[i].body = body;
+                  }
+                }
+                setTopics(newTopics);
+                navigate("/read/" + id);
+              }}
+            ></Update>
+          }
+        ></Route>
       </Routes>
-      <Control onChangeMode={changeModeHandler} selectedId={id} />
+
+      <Routes>
+        <Route
+          path="/"
+          element={<Control onChangeMode={changeModeHandler} />}
+        ></Route>
+        <Route
+          path="/read/:id"
+          element={<Control onChangeMode={changeModeHandler} />}
+        ></Route>
+      </Routes>
     </>
   );
 }
@@ -229,27 +277,17 @@ function Read(props) {
       body = topics[i].body;
     }
   }
-  console.log(title, body);
   return <Article title={title} body={body} />;
 }
 function Control(props) {
-  function ClickHandler(evt) {
-    evt.preventDefault();
-    props.onChangeMode("CREATE");
-  }
-  function ClickUpdateHandler(evt) {
-    evt.preventDefault();
-    props.onChangeMode("UPDATE", props.selectedId);
-  }
-
+  const params = useParams();
+  const selectedId = Number(params.id);
   let contextUI = null;
-  if (props.selectedId > 0) {
+  if (selectedId > 0) {
     contextUI = (
       <>
         <li>
-          <a href="/update" onClick={ClickUpdateHandler}>
-            update
-          </a>
+          <Link to={"/update/" + selectedId}>update</Link>
         </li>
         <li>
           <form
